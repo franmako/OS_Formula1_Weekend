@@ -11,44 +11,29 @@ main(){
     key_t key;
     char *shm, *s;
 
-    /*
-     * We'll name our shared memory segment
-     * "5678".
-     */
+    //On nomme le segment de mémoire partagée "5678"
     key = 5678;
 
-    /*
-     * Create the segment.
-     */
+    //Création du segment de mémoire
     if ((shmid = shmget(key, SHMSZ, IPC_CREAT | 0666)) < 0) {
-        perror("Erreur shmget");
+        perror("!!Erreur Creation Segment Mem!!");
         exit(1);
     }
 
-    /*
-     * Now we attach the segment to our data space.
-     */
+    //On attache le segment à notre espace de données
     if ((shm = shmat(shmid, NULL, 0)) == (char *) -1) {
-        perror("Erreur shmat");
+        perror("!!Erreur attachement segment à espace données!!");
         exit(1);
     }
 
-    /*
-     * Now put some things into the memory for the
-     * other process to read.
-     */
+    //On place des char dans la mémoire partagée pour que les client puisse le lire
     s = shm;
 
     for (c = 'a'; c <= 'z'; c++)
         *s++ = c;
     s = NULL;
 
-    /*
-     * Finally, we wait until the other process
-     * changes the first character of our memory
-     * to '*', indicating that it has read what
-     * we put there.
-     */
+    //Attente de l'ack du client
     while (*shm != '*')
         sleep(1);
 
