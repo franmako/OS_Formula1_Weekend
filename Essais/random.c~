@@ -1,0 +1,18 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int main(int argc, char *argv[]){
+    int temps,totalTime=0;
+    int i;
+    srand(time(NULL));
+
+    for(i=0;i<3;i++){
+    temps= ((rand()%11)+30); //rand()% x + n | n = min et n +(x-1) = max.
+	sleep(temps);//Attends le nb de secondes du random avant d'afficher le temps
+        printf("Temps du secteur %d : %d\n",i,temps);
+	totalTime += temps;
+	printf("Temps total= %d\n",totalTime);
+    }
+    return 0;
+}
