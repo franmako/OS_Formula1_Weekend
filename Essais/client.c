@@ -13,7 +13,7 @@ main()
     char *shm, *s;
 
     //Choix du segment de mémoire
-    key = 5678;
+    key = 45;//La clé doit correspondre à celle du segment du serveur
 
     //Trouver emplacement segment
     if ((shmid = shmget(key, SHMSZ, 0666)) < 0) {
