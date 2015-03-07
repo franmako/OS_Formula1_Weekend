@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#define NBTOURS 5
+#define NBTOURS 10
 
 void getTempsSecteur();
 void getTempsTour(int);
