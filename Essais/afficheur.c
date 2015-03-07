@@ -3,37 +3,32 @@
 #include <sys/shm.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "afficheur.h"
 
 #define SHMSZ     27
 
 main()
 {
+    sharedMemClient();
+    exit(0);
+}
+void sharedMemClient(){
     int shmid;
     key_t key;
     char *shm, *s;
+    key = 85;
 
-    //Choix du segment de mémoire
-    key = 45;//La clé doit correspondre à celle du segment du serveur
-
-    //Trouver emplacement segment
-    if ((shmid = shmget(key, SHMSZ, 0666)) < 0) {
+    if ((shmid = shmget(key, SHMSZ, 0666)) < 0) {//Recherche du segment
         perror("shmget");
         exit(1);
     }
 
-    //Attachement du segment à l'espace de données
-    if ((shm = shmat(shmid, NULL, 0)) == (char *) -1) {
+    if ((shm = shmat(shmid, NULL, 0)) == (char *) -1) {//Attachement du segment
         perror("shmat");
         exit(1);
     }
 
-    //Lecture du segment
-    for (s = shm; s != NULL; s++)
-        putchar(*s);
-    putchar('\n');
-
-    //Envoi de l'ACK
-    *shm = '*';
-
-    exit(0);
+    s=shm;//Lecture du segment
+    printf("%s\n",s);//Affichage du segment
+    *shm = '*';//Envoi de l'ACK
 }

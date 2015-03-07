@@ -1,16 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "pilote.h"
 #define NBTOURS 5
-
-void getTempsSecteur();
-void getTempsTour(int);
 
 main(){
     int i,nbPilote;
     srand(time(NULL));
     for(i=0;i<NBTOURS;i++){
-	printf("|--------------|\n");        
+	printf("|--------------|\n");
 	printf("|*** Tour %d ***|\n",i+1);
 	printf("|--------------|\n");
         getTempsSecteur();
@@ -36,3 +34,4 @@ void getTempsTour(int totalLapTime){
 	    printf("Temps total pour le tour= %d secondes \n\n",totalTimeSec);
 	}
 }
+
