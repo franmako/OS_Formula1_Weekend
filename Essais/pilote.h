@@ -1,2 +1,2 @@
-void getTempsSecteur();
+int *getTempsSecteur();
 void getTempsTour(int);
