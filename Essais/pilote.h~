@@ -1,0 +1,2 @@
+double *getTempsSecteur(int*);
+void getTotalTime(int);

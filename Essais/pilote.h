@@ -1,2 +1,3 @@
 int *getTempsSecteur();
-void getTempsTour(int);
+void getTotalTime(int*);
+

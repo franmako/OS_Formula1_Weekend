@@ -1,38 +1,51 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "pilote.h"
 #define NBTOURS 5
+#define NBSECTORS 3
+#define SEC_MAX 40.0
 
-void getTempsSecteur();
-void getTempsTour(int);
+/*typedef struct{
+    int[NBTOURS] tempsTours;
+}Course*/
 
 main(){
-    int i,nbPilote;
+    int i,j,nbPilote;
+    double *sectorTime,*totalRaceTime;
     srand(time(NULL));
     for(i=0;i<NBTOURS;i++){
-	printf("|--------------|\n");        
-	printf("|*** Tour %d ***|\n",i+1);
-	printf("|--------------|\n");
-        getTempsSecteur();
+        printf("|--------------|\n");
+        printf("|*** Tour %d ***|\n",i+1);
+        printf("|--------------|\n");
+        sectorTime= getTempsSecteur(totalRaceTime);
+        for(j=0;j<NBSECTORS;j++)
+            printf("Temps du secteur %d : %f secondes\n",i,*(sectorTime+j));
+        getTotalTime(*totalRaceTime);
     }
 }
-void getTempsSecteur(){
-    int i,sectorTime,totalLapTime=0;
+double* getTempsSecteur(double *totalRaceTime){
+    int i,totalLapTime;
+    static float sectorTime[2];
     for(i=0;i<3;i++){
-        sectorTime= ((rand()%11)+30); //rand()% x + n | n = min et n +(x-1) = max.
+	sectorTime[i]= ((float)rand()/(float)(RAND_MAX)) * SEC_MAX;
+        //sectorTime[i]= ((rand()%11)+30); //rand()% x + n | n = min et n +(x-1) = max.
         //sleep(sectorTime);//Attends le nb de secondes du random avant d'afficher le temps
-        printf("Temps du secteur %d : %d secondes\n",i+1,sectorTime);
-        totalLapTime += sectorTime;//Calcule le temps total après chaque tour
+        *totalRaceTime += sectorTime[i];//Calcule le temps total après chaque tour
+        totalLapTime += sectorTime[i];
     }
-    getTempsTour(totalLapTime);
+    printf("Temps total tour= %d secondes\n",*totalRaceTime);
+    return(sectorTime);
 }
-void getTempsTour(int totalLapTime){
+void getTotalTime(int totalLapTime){
     int totalTimeMin,totalTimeSec;
     totalTimeMin= (totalLapTime/60);
 	totalTimeSec= (totalLapTime%60);
 	if(totalTimeMin != 0){
-        printf("Temps total pour le tour= %d minute(s) %d secondes \n\n",totalTimeMin,totalTimeSec);
+        printf("Temps total= %d minute(s) %d secondes \n\n",totalTimeMin,totalTimeSec);
 	}else{
-	    printf("Temps total pour le tour= %d secondes \n\n",totalTimeSec);
+	    printf("Temps total= %d secondes \n\n",totalTimeSec);
 	}
 }
+
+
