@@ -15,5 +15,6 @@ int *getTempsSecteur();
 void getTotalTime(double*);
 double *getRandomFloat(double,double,double*);
 void getTempsTour(double*);
+void getTempsCourse(double*);
 
 
