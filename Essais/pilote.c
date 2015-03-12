@@ -3,31 +3,33 @@
 int main(){
     srand(time(NULL));
     int i,j;
-    double *sectorTime;
+    double *sectorTime,*totalLapTime;
     for(i=0;i<NBTOURS;i++){
         printf("|--------------|\n");
         printf("|*** Tour %d ***|\n",i+1);
         printf("|--------------|\n");
-        sectorTime= getRandomFloat(SEC_MIN,SEC_MAX);
-        //getTempsTour(totalLapTime);
+        sectorTime= getRandomFloat(SEC_MIN,SEC_MAX,totalLapTime);
         for(j=0;j<NBSECTORS;j++)
-            printf("Temps du secteur %d : %2.2f secondes\n",j+1,*(sectorTime+j));
+            printf("Temps du secteur %d : %2.3f secondes\n",j+1,*(sectorTime+j));
+        getTempsTour(totalLapTime);
     }
     return(0);
 }
 
-void getTempsTour(int totalLapTime){
-    int totalTimeMin,totalTimeSec;
-    totalTimeMin= (totalLapTime/60);
-	totalTimeSec= (totalLapTime%60);
-	if(totalTimeMin != 0){
-        printf("Temps total pour le tour= %d minute(s) %d secondes \n\n",totalTimeMin,totalTimeSec);
+void getTempsTour(double *totalLapTime){
+    double totalTimeSec;
+    int totalTimeMin;
+    totalTimeMin= (*totalLapTime/60);
+	totalTimeSec= fmod(*totalLapTime,60.0);
+
+	if(totalTimeMin != 0.0){
+        printf("Temps total pour le tour= %d minute(s) %2.3f secondes \n\n",totalTimeMin,totalTimeSec);
 	}else{
-	    printf("Temps total pour le tour= %d secondes \n\n",totalTimeSec);
+	    printf("Temps total pour le tour= %2.3f secondes \n\n",totalTimeSec);
 	}
 }
 
-double *getRandomFloat(double a, double b) {
+double *getRandomFloat(double a, double b,  double *lapTime) {
     double random,diff,r,totalLapTime;
     static double sectorTime[NBSECTORS];
     int i;
@@ -38,6 +40,7 @@ double *getRandomFloat(double a, double b) {
         sectorTime[i]= a+r;
         totalLapTime += sectorTime[i];
     }
+    *lapTime= totalLapTime;
     return (sectorTime);
 }
 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
+#include <math.h>
 
 #define NBTOURS 5
 #define NBSECTORS 3
@@ -11,7 +12,8 @@
 /* -- PROTOTYPES -- */
 
 int *getTempsSecteur();
-void getTotalTime(int*);
-double *getRandomFloat(double, double);
+void getTotalTime(double*);
+double *getRandomFloat(double,double,double*);
+void getTempsTour(double*);
 
 
