@@ -1,1 +1,2 @@
+/* -- PROTOTYPES -- */
 void sharedMemServer();
