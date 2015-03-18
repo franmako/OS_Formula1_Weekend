@@ -2,35 +2,41 @@
 
 int main(){
     srand(time(NULL));
-    int i,j;
-    double *sectorTime,*totalLapTime,*totalRaceTime;
+    int i,j,totalTimeMin;
+    double *sectorTime,totalRaceTime,totalTimeSec;
     for(i=0;i<NBTOURS;i++){
         printf("|--------------|\n");
         printf("|*** Tour %d ***|\n",i+1);
         printf("|--------------|\n");
-        sectorTime= getRandomFloat(SEC_MIN,SEC_MAX,totalLapTime);
-        for(j=0;j<NBSECTORS;j++)
+        sectorTime= getRandomFloat(SEC_MIN,SEC_MAX);
+        for(j=0;j<NBSECTORS;j++){
             printf("Temps du secteur %d : %2.3f secondes\n",j+1,*(sectorTime+j));
-        getTempsTour(totalLapTime);
-        //totalRaceTime += *totalLapTime;
-        getTempsCourse(totalRaceTime);
+            totalRaceTime += *sectorTime;
+        }
+        totalTimeMin= (totalRaceTime/60);
+        totalTimeSec= fmod(totalRaceTime,60.0);
+
+        if(totalTimeMin != 0){
+            printf("Temps total pour la course= %d minute(s) %2.3f secondes \n\n",totalTimeMin,totalTimeSec);
+        }else{
+            printf("Temps total pour la course= %2.3f secondes \n\n",totalTimeSec);
+        }
     }
     return(0);
 }
 
-void getTempsTour(double *totalLapTime){
-    double totalTimeSec;
-    int totalTimeMin;
-    totalTimeMin= (*totalLapTime/60);
-	totalTimeSec= fmod(*totalLapTime,60.0);
+void getTempsTour(double lapTime){
+    double timeSec;
+    int timeMin;
+    timeMin= (lapTime/60);
+    timeSec= fmod(lapTime,60.0);
 
-	if(totalTimeMin != 0.0){
-        printf("Temps total pour le tour= %d minute(s) %2.3f secondes \n\n",totalTimeMin,totalTimeSec);
-	}else{
-	    printf("Temps total pour le tour= %2.3f secondes \n\n",totalTimeSec);
-	}
+    if(timeMin != 0.0){
+        printf("Temps tour= %d minute %2.3f secondes\n",timeMin,timeSec);
+    }else{
+        printf("Temps tour= %2.3f secondes\n",timeSec);
+    }
 }
-
 void getTempsCourse(double *totalRaceTime){
     double totalTimeSec;
     int totalTimeMin;
@@ -44,8 +50,8 @@ void getTempsCourse(double *totalRaceTime){
 	}
 }
 
-double *getRandomFloat(double a, double b,  double *lapTime) {
-    double random,diff,r,totalLapTime;
+double *getRandomFloat(double a, double b) {
+    double random,diff,r,lapTime;
     static double sectorTime[NBSECTORS];
     int i;
     for(i=0;i<NBSECTORS;i++){
@@ -53,9 +59,9 @@ double *getRandomFloat(double a, double b,  double *lapTime) {
         diff = b - a;
         r = random * diff;
         sectorTime[i]= a+r;
-        totalLapTime += sectorTime[i];
+        lapTime += sectorTime[i];
     }
-    *lapTime= totalLapTime;
+    getTempsTour(lapTime);
     return (sectorTime);
 }
 
