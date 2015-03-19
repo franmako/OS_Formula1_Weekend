@@ -9,10 +9,28 @@
 #define SEC_MIN 30.0
 #define SEC_MAX 40.0
 
+/* -- STRUCTURES -- */
+typedef struct{
+    int minutes;
+    double secondes;
+}FTime;
+
+typedef struct{
+    double tbSectorTime[NBSECTORS];
+    double lapTimeS;
+    FTime lapTimeF;
+}Lap;
+
+typedef struct{
+    Lap tbLap[NBTOURS];
+    double totalTimeS;
+    FTime totalTimeF;
+}Race;
+
 /* -- PROTOTYPES -- */
 
 int *getTempsSecteur();
 void getTotalTime(double*);
-double *getRandomFloat(double,double);
+double getRandomFloat(double,double);
 void getTempsTour(double);
 

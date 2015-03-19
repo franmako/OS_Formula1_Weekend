@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    if ((fd = open("mmapdemo.c", O_RDONLY)) == -1) {
+    if ((fd = open("mmapdemo.time", O_RDONLY)) == -1) {
         perror("open");
         exit(1);
     }
@@ -30,13 +30,13 @@ int main(int argc, char *argv[])
 
     offset = 30;//atoi(argv[1]);
     if (offset < 0 || offset > sbuf.st_size-1) {
-        fprintf(stderr, "mmapdemo: offset must be in the range 0-%d\n", \
+        fprintf(stderr, "mmapdemo: offset must be in the range 0- %d\n", \
                                                               sbuf.st_size-1);
         exit(1);
     }
 
-    data = mmap((caddr_t)0, sbuf.st_size, PROT_READ, MAP_SHARED, fd, 0)) \
-                                                           == (caddr_t)(-1)) {
+    data = mmap((caddr_t)0, sbuf.st_size, PROT_READ, MAP_SHARED, fd, 0) \
+                                                           == (caddr_t)(-1) {
     if (data == (caddr_t)(-1)) {
         perror("mmap");
         exit(1);
