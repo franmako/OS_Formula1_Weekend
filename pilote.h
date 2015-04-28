@@ -32,5 +32,5 @@ typedef struct{
 int *getTempsSecteur();
 void getTotalTime(double*);
 double getRandomFloat(double,double);
-void getTempsTour(double);
+void getTempsTour(Lap);
 
