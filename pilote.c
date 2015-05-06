@@ -2,41 +2,26 @@
 
 int main(){
     srand(time(NULL));
-    int i,j;Lap tour;Race course;
+    int i,j;
+    int nbTours= NBTRSCOURSE;
+    TPilote pilote;
 
-   for(i=0;i<NBTOURS;i++){
+    pilote.nbPilote = 44;
+    for(i=0;i<nbTours;i++){
     printf("|--------------|\n");
     printf("|*** Tour %d ***|\n",i+1);
     printf("|--------------|\n");
         for(j=0;j<NBSECTORS;j++){
-            tour.tbSectorTime[j]= getSectorTime(SEC_MIN,SEC_MAX);
-            //sleep(tour.tbSectorTime[j]);
-            printf("Temps du secteur %d : %2.3f secondes\n",j+1,tour.tbSectorTime[j]);
-            sharedMemWrite(tour.tbSectorTime[j]);
-            //tour.lapTimeS += tour.tbSectorTime[j];
+            pilote.GPrix.course[i].tbTempsSect[j]= getSectorTime(SEC_MIN,SEC_MAX);
+            //sleep(pilote.tbTempsSecteurs[j]);
+            printf("Temps du secteur %d : %2.3f secondes\n",j+1,pilote.GPrix.course[i].tbTempsSect[j]);
         }
-        //getTempsTour(tour);
+        //getTempspilote(pilote);
     }
-
+    sharedMem(SHM_WRITE,&pilote,1);
     return 0;
 }
 
-void getTempsTour(Lap tour){
-    (tour.lapTimeF.minutes)= (tour.lapTimeS/60);
-    (tour.lapTimeF.secondes)= fmod(tour.lapTimeS,60.0);
-}
-void getTempsCourse(double *totalRaceTime){
-    double totalTimeSec;
-    int totalTimeMin;
-    totalTimeMin= (*totalRaceTime/60);
-	totalTimeSec= fmod(*totalRaceTime,60.0);
-
-	if(totalTimeMin != 0.0){
-        printf("Temps total pour la course= %d minute(s) %2.3f secondes \n\n",totalTimeMin,totalTimeSec);
-	}else{
-	    printf("Temps total pour la course= %2.3f secondes \n\n",totalTimeSec);
-	}
-}
 double getSectorTime(double a, double b) {
     double random,diff,r;
     static double sectorTime;
@@ -49,12 +34,11 @@ double getSectorTime(double a, double b) {
     return (sectorTime);
 }
 
-void sharedMemWrite(double sectorTime){
+void sharedMem(int mode,TPilote *ptPilote,int nbPilotes){
     key_t key;
     int shmid;
     void* data;
-    int mode= SHM_WRITE;
-    double test= sectorTime;
+    int shmSize= nbPilotes * sizeof(TPilote);
 
     if (mode > SHM_WRITE) {
         fprintf(stderr, "usage: shmdemo [data_to_write]\n");
@@ -68,9 +52,11 @@ void sharedMemWrite(double sectorTime){
     }
 
     /* connect to (and possibly create) the segment: */
-    if ((shmid = shmget(key, SHM_SIZE, 0644 | IPC_CREAT)) == ERROR) {
+    if ((shmid = shmget(key, shmSize, 0644 | IPC_CREAT)) == ERROR) {
         perror("shmget");
         exit(1);
+    }else{
+        printf("%d",shmid);
     }
 
     /* attach to the segment to get a pointer to it: */
@@ -82,10 +68,12 @@ void sharedMemWrite(double sectorTime){
 
     /* read or modify the segment, based on the command line: */
     if (mode == SHM_WRITE) {
-        printf("Ecriture dans le segment: \"%2.3f\"\n", test);
-        memcpy(data, &test, SHM_SIZE);
-    } else
-        printf("Le segment contiens: \"%2.3f\"\n", *(double*)data);
+        memcpy(data,ptPilote, sizeof(TPilote));
+        printf("Ecriture dans la mémoire partagée: N° Pilote: %d \n",ptPilote->nbPilote);
+    }else{
+        memcpy(ptPilote,data, sizeof(TPilote));
+        //printf("Le segment contiens: N° Pilote: %d \n",ptPilote.nbPilote);
+    }
 
     /* detach from the segment: */
     if (shmdt(data) == ERROR) {
