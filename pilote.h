@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
-#include <math.h> /* Pour l'utilisation de fmod pour le calcul des modulo pour float */
+#include <math.h> //Pour l'utilisation de fmod pour le calcul des modulo pour float
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

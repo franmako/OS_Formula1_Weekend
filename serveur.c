@@ -6,18 +6,24 @@ int main(){
     TPilote pilote_serv;
     TPilote *ptPilote= &pilote_serv;
     sharedMem(SHM_READ,ptPilote,1);
-    printf("N° Pilote: %d \n",pilote_serv.nbPilote);
+    //printf("N° Pilote: %d \n",pilote_serv.nbPilote);
 
-    for(i=0;i<nbTours;i++){
+    /*for(i=0;i<nbTours;i++){
     printf("|--------------|\n");
     printf("|*** Tour %d ***|\n",i+1);
     printf("|--------------|\n");
         for(j=0;j<NBSECTORS;j++){
             printf("Temps du secteur %d : %2.3f secondes\n",j+1,pilote_serv.GPrix.course[i].tbTempsSect[j]);
         }
-    }
+    }*/
     return 0;
 }
+
+ /*
+ mode: mode d'accès du segment mémoire (SHM_READ pour lecture ou SHM_WRITE pour écriture)
+ *ptPilote: pointeur vers un type abstrait TPilote(voir pilote.h)
+ nbPilotes: nombre de pilotes pour l'allocation de la taille du segment mémoire
+ */
 void sharedMem(int mode,TPilote *ptPilote,int nbPilotes){
     key_t key;
     int shmid;
@@ -28,41 +34,33 @@ void sharedMem(int mode,TPilote *ptPilote,int nbPilotes){
         fprintf(stderr, "usage: shmdemo [data_to_write]\n");
         exit(1);
     }
-
-    /* make the key: */
+    //Création de la clé
     if ((key = ftok("shared_memory", 'R')) == ERROR) {
         perror("ftok");
         exit(1);
     }
-
-    /* connect to (and possibly create) the segment: */
+    //Création du segment
     if ((shmid = shmget(key, shmSize, 0644 | IPC_CREAT)) == ERROR) {
         perror("shmget");
         exit(1);
     }else{
         printf("%d",shmid);
     }
-
-    /* attach to the segment to get a pointer to it: */
+    //Attachement au segment pour recevoir un pointeur vers ce dernier
     data = shmat(shmid, (void*)0, 0);
     if (data == (void*)(ERROR)) {
         perror("shmat");
         exit(1);
     }
-
-    /* read or modify the segment, based on the command line: */
+    //Lecture ou écriture dans le segment mémoire en fonction du mode
     if (mode == SHM_WRITE) {
-        printf("Ecriture dans la mémoire partagée: \"N° Pilote: %d \"\n",ptPilote->nbPilote);
         memcpy(data,ptPilote, sizeof(TPilote));
-        //data= ptPilote;
+        printf("Ecriture dans la mémoire partagée: N° Pilote: %d \n",ptPilote->nbPilote);
     }else{
         memcpy(ptPilote,data, sizeof(TPilote));
-        //ptPilote= (TPilote*)data;
-        //printf("Le segment contiens: N° Pilote: %d \n",ptPilote.nbPilote);
     }
-
-    /* detach from the segment: */
-    if (shmdt(data) == -1) {
+    //Détachement du segment
+    if (shmdt(data) == ERROR) {
         perror("shmdt");
         exit(1);
     }
