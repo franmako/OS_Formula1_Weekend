@@ -12,12 +12,20 @@
 
 #define ERROR -1
 #define NBTRSCOURSE 5
-#define NBTRSESSAIS 5
-#define NBTRSQUALIF 5
+#define NBTRSMAXESSAIS 10
+#define NBTRSMAXQUALIF 5
 #define NBSECTORS 3
 #define SEC_MIN 30.0
 #define SEC_MAX 40.0
 #define SHM_WRITE 2
+#define ESSAI_P1 0
+#define ESSAI_P2 1
+#define ESSAI_P3 2
+#define TRUE 1
+#define FALSE 0
+#define MIN_DNF 0
+#define MAX_DNF 100
+#define DNFPROB 80
 
 
 /* -- STRUCTURES -- */
@@ -32,11 +40,20 @@ typedef struct{
 }TTour;
 
 typedef struct{
-    int nbToursEssais;
-    int nbToursQualif;
-    int nbToursCourse;
-    TTour essais[NBTRSESSAIS];
-    TTour qualif[NBTRSQUALIF];
+    int nbTrsEssais[3];
+    int nbTrsQualif;
+    int nbTrsCourse;
+    //Essais
+    int isOut;
+    int isStand;
+    int lapPit;
+    int DNF;
+    int lapDNF;
+    TTour P1[NBTRSMAXESSAIS];
+    TTour P2[NBTRSMAXESSAIS];
+    TTour P3[NBTRSMAXESSAIS];
+    //Qualifs
+    TTour qualif[NBTRSMAXQUALIF];
     TTour course[NBTRSCOURSE];
 }TWECourse;
 
@@ -47,7 +64,9 @@ typedef struct{
 }TPilote;
 
 /* -- PROTOTYPES -- */
-void getTotalTime(double*);
-double getSectorTime(double,double);
+int getRandomInt(int,int);
+double getRandomFloat(double,double);
+void getSectorEssais(TPilote*,int,int);
 void sharedMem(int,TPilote*,int);
+
 
