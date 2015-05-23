@@ -21,6 +21,9 @@
 #define ESSAI_P1 0
 #define ESSAI_P2 1
 #define ESSAI_P3 2
+#define QUALIF_Q1 3
+#define QUALIF_Q2 4
+#define QUALIF_Q3 5
 #define TRUE 1
 #define FALSE 0
 #define MIN_DNF 0
@@ -53,7 +56,12 @@ typedef struct{
     TTour P2[NBTRSMAXESSAIS];
     TTour P3[NBTRSMAXESSAIS];
     //Qualifs
-    TTour qualif[NBTRSMAXQUALIF];
+    TTour Q1[NBTRSMAXQUALIF];
+    int isQualifQ2;
+    TTour Q2[NBTRSMAXQUALIF];
+    int isQualifQ3;
+    TTour Q3[NBTRSMAXQUALIF];
+    int classementCourse;
     TTour course[NBTRSCOURSE];
 }TWECourse;
 
@@ -66,7 +74,7 @@ typedef struct{
 /* -- PROTOTYPES -- */
 int getRandomInt(int,int);
 double getRandomFloat(double,double);
-void getEssais(TPilote*,int,char*);
+void getLapTime(TPilote*,int,char*);
 void sharedMem(int,TPilote*,int);
 
 

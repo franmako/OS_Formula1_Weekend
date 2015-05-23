@@ -10,24 +10,21 @@ int main(){
     pilote.GPrix.isStand= FALSE;
 
     //Essais
-    getEssais(ptPilote,ESSAI_P1,"Essais Vendredi Matin");
-    getEssais(ptPilote,ESSAI_P2,"Essais Vendredi Après-Midi");
-    getEssais(ptPilote,ESSAI_P3,"Essais Samedi Matin");
-    //Qualifs Q1
+    getLapTime(ptPilote,ESSAI_P1,"Essais Vendredi Matin");
+    getLapTime(ptPilote,ESSAI_P2,"Essais Vendredi Après-Midi");
+    getLapTime(ptPilote,ESSAI_P3,"Essais Samedi Matin");
 
-    //Course
-    //for(i=0;i<NBTRSCOURSE;i++){//Début boucle tours
-    /*printf("|--------------|\n");
-    printf("|*** Tour %d ***|\n",i+1);
-    printf("|--------------|\n");*//*
-        for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-            pilote.GPrix.course[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-            //sleep(pilote.tbTempsSecteurs[j]); //Sleep pour la génération en temps réel
-            //printf("Temps du secteur %d : %2.3f secondes\n",j+1,pilote.GPrix.course[i].tbTempsSect[j]);
+    //Qualifs
+    getLapTime(ptPilote,QUALIF_Q1,"Qualifs Q1");
+    if(pilote.GPrix.isQualifQ2 == TRUE){
+        getLapTime(ptPilote,QUALIF_Q2,"Qualifs Q2");
+        if(pilote.GPrix.isQualifQ3 == TRUE){
+            getLapTime(ptPilote,QUALIF_Q3,"Qualifs Q3");
         }
     }
-    //sharedMem(SHM_WRITE,&pilote,1);//Ecriture dans le segment shm
-    return 0;*/
+
+    //Course
+
 }
 
 /*
@@ -59,7 +56,7 @@ double getRandomFloat(double a, double b) {
 /*
 
 */
-void getEssais(TPilote *ptPilote,int etape,char* nom_etape){
+void getLapTime(TPilote *ptPilote,int etape,char* nom_etape){
     int i,j;
     ptPilote->GPrix.nbTrsEssais[etape]= getRandomInt(1,NBTRSMAXESSAIS);
     ptPilote->GPrix.DNF= getRandomInt(MIN_DNF,MAX_DNF);//Génération d'un int pour savoir si le pilote sera out
@@ -82,17 +79,38 @@ void getEssais(TPilote *ptPilote,int etape,char* nom_etape){
                         case ESSAI_P1:
                             ptPilote->GPrix.P1[i].tbTempsSect[j]= 0.0;
                             //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P1[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P2:
                             ptPilote->GPrix.P2[i].tbTempsSect[j]= 0.0;
                             //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P2[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P3:
                             ptPilote->GPrix.P3[i].tbTempsSect[j]= 0.0;
                             //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P3[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q1:
+                            ptPilote->GPrix.Q1[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q1[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q2:
+                            ptPilote->GPrix.Q2[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q2[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q3:
+                            ptPilote->GPrix.Q3[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q3[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.Q3[i].tbTempsSect[j]);
                             break;
                     }
                     sharedMem(SHM_WRITE,ptPilote,1);
@@ -104,17 +122,38 @@ void getEssais(TPilote *ptPilote,int etape,char* nom_etape){
                         case ESSAI_P1:
                             ptPilote->GPrix.P1[i].tbTempsSect[j]= 0.0;
                             //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P1[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P2:
                             ptPilote->GPrix.P2[i].tbTempsSect[j]= 0.0;
                             //sleep(ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P2[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P3:
                             ptPilote->GPrix.P3[i].tbTempsSect[j]= 0.0;
                             //sleep(ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P3[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q1:
+                            ptPilote->GPrix.Q1[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q1[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q2:
+                            ptPilote->GPrix.Q2[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q2[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q3:
+                            ptPilote->GPrix.Q3[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q3[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.Q3[i].tbTempsSect[j]);
                             break;
                     }
                     sharedMem(SHM_WRITE,ptPilote,1);
@@ -126,17 +165,38 @@ void getEssais(TPilote *ptPilote,int etape,char* nom_etape){
                         case ESSAI_P1:
                             ptPilote->GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
                             //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P1[i].tempsTour += ptPilote->GPrix.P1[i].tbTempsSect[j];
                             printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P2:
                             ptPilote->GPrix.P2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
                             //sleep(ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P2[i].tempsTour += ptPilote->GPrix.P2[i].tbTempsSect[j];
                             printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P3:
                             ptPilote->GPrix.P3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
                             //sleep(ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P3[i].tempsTour += ptPilote->GPrix.P3[i].tbTempsSect[j];
                             printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q1:
+                            ptPilote->GPrix.Q1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q1[i].tempsTour += ptPilote->GPrix.Q1[i].tbTempsSect[j];
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q2:
+                            ptPilote->GPrix.Q2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);
+                            //sleep(ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q2[i].tempsTour += ptPilote->GPrix.Q2[i].tbTempsSect[j];
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q3:
+                            ptPilote->GPrix.Q3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);
+                            //sleep(ptPilote->GPrix.Q3[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q3[i].tempsTour += ptPilote->GPrix.Q3[i].tbTempsSect[j];
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.Q3[i].tbTempsSect[j]);
                             break;
                     }
                     sharedMem(SHM_WRITE,ptPilote,1);
@@ -156,15 +216,36 @@ void getEssais(TPilote *ptPilote,int etape,char* nom_etape){
                     switch(etape){
                         case ESSAI_P1:
                             ptPilote->GPrix.P1[i].tbTempsSect[j]= 0.0;
+                            ptPilote->GPrix.P1[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P2:
                             ptPilote->GPrix.P2[i].tbTempsSect[j]= 0.0;
+                            ptPilote->GPrix.P2[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P3:
                             ptPilote->GPrix.P3[i].tbTempsSect[j]= 0.0;
+                            ptPilote->GPrix.P3[i].tempsTour= 0.0;
                             printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q1:
+                            ptPilote->GPrix.Q1[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q1[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q2:
+                            ptPilote->GPrix.Q2[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q2[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q3:
+                            ptPilote->GPrix.Q3[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q3[i].tempsTour= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.Q3[i].tbTempsSect[j]);
                             break;
                     }
                     sharedMem(SHM_WRITE,ptPilote,1);
@@ -175,17 +256,38 @@ void getEssais(TPilote *ptPilote,int etape,char* nom_etape){
                         case ESSAI_P1:
                             ptPilote->GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
                             //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P1[i].tempsTour += ptPilote->GPrix.P1[i].tbTempsSect[j];
                             printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P2:
                             ptPilote->GPrix.P2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
                             //sleep(ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P2[i].tempsTour += ptPilote->GPrix.P2[i].tbTempsSect[j];
                             printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
                             break;
                         case ESSAI_P3:
                             ptPilote->GPrix.P3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
                             //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.P3[i].tempsTour += ptPilote->GPrix.P3[i].tbTempsSect[j];
                             printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q1:
+                            ptPilote->GPrix.Q1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);
+                            //sleep(ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q1[i].tempsTour += ptPilote->GPrix.Q1[i].tbTempsSect[j];
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.Q1[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q2:
+                            ptPilote->GPrix.Q2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);
+                            //sleep(ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q2[i].tempsTour += ptPilote->GPrix.Q2[i].tbTempsSect[j];
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.Q2[i].tbTempsSect[j]);
+                            break;
+                        case QUALIF_Q3:
+                            ptPilote->GPrix.Q3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);
+                            //sleep(ptPilote->GPrix.Q3[i].tbTempsSect[j]);
+                            ptPilote->GPrix.Q3[i].tempsTour += ptPilote->GPrix.Q3[i].tbTempsSect[j];
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.Q3[i].tbTempsSect[j]);
                             break;
                     }
                     sharedMem(SHM_WRITE,ptPilote,1);

@@ -6,16 +6,8 @@ int main(){
     TPilote pilote_serv;
     TPilote *ptPilote= &pilote_serv;
     sharedMem(SHM_READ,ptPilote,1);
-    //printf("N° Pilote: %d \n",pilote_serv.nbPilote);
+    printf("N° Pilote: %d \n",pilote_serv.nbPilote);
 
-    /*for(i=0;i<nbTours;i++){
-    printf("|--------------|\n");
-    printf("|*** Tour %d ***|\n",i+1);
-    printf("|--------------|\n");
-        for(j=0;j<NBSECTORS;j++){
-            printf("Temps du secteur %d : %2.3f secondes\n",j+1,pilote_serv.GPrix.course[i].tbTempsSect[j]);
-        }
-    }*/
     return 0;
 }
 
