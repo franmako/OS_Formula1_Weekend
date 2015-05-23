@@ -9,186 +9,10 @@ int main(){
     pilote.GPrix.isOut= FALSE;
     pilote.GPrix.isStand= FALSE;
 
-    //Essais P1
-    pilote.GPrix.nbTrsEssais[ESSAI_P1]= getRandomInt(1,NBTRSMAXESSAIS);
-    pilote.GPrix.DNF= getRandomInt(MIN_DNF,MAX_DNF);//Génération d'un int pour savoir si le pilote sera out
-    pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.nbTrsEssais[ESSAI_P1]);//Choix du tour pour aller dans les stands
-    printf("DNF probability: %d \n",pilote.GPrix.DNF);
-    if(pilote.GPrix.DNF >= DNFPROB){
-        pilote.GPrix.lapDNF= getRandomInt(1,pilote.GPrix.nbTrsEssais[ESSAI_P1]); //Tours à partir du quel le pilote est OUT
-        pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.lapDNF);//Choix du tour pour aller dans les stands
-        printf("DNF lap: %d \n",pilote.GPrix.lapDNF);
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais prévus, vendredi matin: %d \n",pilote.GPrix.nbTrsEssais[ESSAI_P1]);
-        for(i=0;i <= pilote.GPrix.lapDNF;i++){
-            printf("|--------------|\n");
-            printf("|*** Tour %d ***|\n",i);
-            printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P1[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P1[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }else if(i == pilote.GPrix.lapDNF){
-                pilote.GPrix.isOut= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P1[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (DNF) \n",pilote.GPrix.P1[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }else{
-                for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P1[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }
-        }
-    }else{
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais vendredi matin: %d \n",pilote.GPrix.nbTrsEssais[ESSAI_P1]);
-        for(i=0;i<pilote.GPrix.nbTrsEssais[ESSAI_P1];i++){
-            printf("|--------------|\n");
-            printf("|*** Tour %d ***|\n",i);
-            printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P1[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P1[i].tbTempsSect[j]);
-                }
-            }else{
-                for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P1[i].tbTempsSect[j]);
-                }
-            }
-        }
-    }
-    //Essais P2
-    pilote.GPrix.nbTrsEssais[ESSAI_P2]= getRandomInt(1,NBTRSMAXESSAIS);
-    pilote.GPrix.DNF= getRandomInt(MIN_DNF,MAX_DNF);//Génération d'un int pour savoir si le pilote sera out
-    pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.nbTrsEssais[ESSAI_P2]);//Choix du tour pour aller dans les stands
-    printf("DNF probability: %d \n",pilote.GPrix.DNF);
-    if(pilote.GPrix.DNF >= DNFPROB){
-        pilote.GPrix.lapDNF= getRandomInt(1,pilote.GPrix.nbTrsEssais[ESSAI_P2]); //Tours à partir du quel le pilote est OUT
-        pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.lapDNF);//Choix du tour pour aller dans les stands
-        printf("DNF lap: %d \n",pilote.GPrix.lapDNF);
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais prévus, vendredi après-midi: %d \n",pilote.GPrix.nbTrsEssais[ESSAI_P2]);
-        for(i=0;i <= pilote.GPrix.lapDNF;i++){
-            printf("|--------------|\n");
-            printf("|*** Tour %d ***|\n",i);
-            printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P2[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P2[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }else if(i == pilote.GPrix.lapDNF){
-                pilote.GPrix.isOut= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P2[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (DNF) \n",pilote.GPrix.P2[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }else{
-                for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P2[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }
-        }
-    }else{
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais vendredi après-midi: %d \n",pilote.GPrix.nbTrsEssais[ESSAI_P2]);
-        for(i=0;i<pilote.GPrix.nbTrsEssais[ESSAI_P2];i++){
-            printf("|--------------|\n");
-            printf("|*** Tour %d ***|\n",i);
-            printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P2[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P2[i].tbTempsSect[j]);
-                }
-            }else{
-                for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P2[i].tbTempsSect[j]);
-                }
-            }
-        }
-    }
-     //Essais P3
-    pilote.GPrix.nbTrsEssais[ESSAI_P3]= getRandomInt(1,NBTRSMAXESSAIS);
-    pilote.GPrix.DNF= getRandomInt(MIN_DNF,MAX_DNF);//Génération d'un int pour savoir si le pilote sera out
-    pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.nbTrsEssais[ESSAI_P3]);//Choix du tour pour aller dans les stands
-    printf("DNF probability: %d \n",pilote.GPrix.DNF);
-    if(pilote.GPrix.DNF >= DNFPROB){
-        pilote.GPrix.lapDNF= getRandomInt(1,pilote.GPrix.nbTrsEssais[ESSAI_P3]); //Tours à partir du quel le pilote est OUT
-        pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.lapDNF);//Choix du tour pour aller dans les stands
-        printf("DNF lap: %d \n",pilote.GPrix.lapDNF);
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais prévus, samedi matin: %d \n",pilote.GPrix.nbTrsEssais[ESSAI_P3]);
-        for(i=0;i <= pilote.GPrix.lapDNF;i++){
-            printf("|--------------|\n");
-            printf("|*** Tour %d ***|\n",i);
-            printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P3[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P3[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }else if(i == pilote.GPrix.lapDNF){
-                pilote.GPrix.isOut= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P3[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (DNF) \n",pilote.GPrix.P3[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }else{
-                for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P3[i].tbTempsSect[j]);
-                }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }
-        }
-    }else{
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais samedi matin: %d \n",pilote.GPrix.nbTrsEssais[ESSAI_P3]);
-        for(i=0;i<pilote.GPrix.nbTrsEssais[ESSAI_P3];i++){
-            printf("|--------------|\n");
-            printf("|*** Tour %d ***|\n",i);
-            printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
-                for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P3[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P3[i].tbTempsSect[j]);
-                }
-            }else{
-                for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P3[i].tbTempsSect[j]);
-                }
-            }
-        }
-    }
+    //Essais
+    getEssais(ptPilote,ESSAI_P1,"Essais Vendredi Matin");
+    getEssais(ptPilote,ESSAI_P2,"Essais Vendredi Après-Midi");
+    getEssais(ptPilote,ESSAI_P3,"Essais Samedi Matin");
     //Qualifs Q1
 
     //Course
@@ -232,70 +56,144 @@ double getRandomFloat(double a, double b) {
 
     return (sectorTime);
 }
-
 /*
-void getEssais(int etape_essais){
-    pilote.GPrix.nbTrsEssais[etape_essais]= getRandomInt(1,NBTRSMAXESSAIS);
-    pilote.GPrix.DNF= getRandomInt(MIN_DNF,MAX_DNF);//Génération d'un int pour savoir si le pilote sera out
-    pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.nbTrsEssais[etape_essais]);//Choix du tour pour aller dans les stands
-    printf("DNF probability: %d \n",pilote.GPrix.DNF);
-    if(pilote.GPrix.DNF >= DNFPROB){
-        pilote.GPrix.lapDNF= getRandomInt(1,pilote.GPrix.nbTrsEssais[etape_essais]); //Tours à partir du quel le pilote est OUT
-        pilote.GPrix.lapPit= getRandomInt(1,pilote.GPrix.lapDNF);//Choix du tour pour aller dans les stands
-        printf("DNF lap: %d \n",pilote.GPrix.lapDNF);
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais prévus, vendredi matin: %d \n",pilote.GPrix.nbTrsEssais[etape_essais]);
-        for(i=0;i <= pilote.GPrix.lapDNF;i++){
+
+*/
+void getEssais(TPilote *ptPilote,int etape,char* nom_etape){
+    int i,j;
+    ptPilote->GPrix.nbTrsEssais[etape]= getRandomInt(1,NBTRSMAXESSAIS);
+    ptPilote->GPrix.DNF= getRandomInt(MIN_DNF,MAX_DNF);//Génération d'un int pour savoir si le pilote sera out
+    ptPilote->GPrix.lapPit= getRandomInt(1,ptPilote->GPrix.nbTrsEssais[etape]);//Choix du tour pour aller dans les stands
+    printf("DNF probability: %d \n\n",ptPilote->GPrix.DNF);
+    if(ptPilote->GPrix.DNF >= DNFPROB){
+        ptPilote->GPrix.lapDNF= getRandomInt(1,ptPilote->GPrix.nbTrsEssais[etape]); //Tours à partir du quel le pilote est OUT
+        ptPilote->GPrix.lapPit= getRandomInt(1,ptPilote->GPrix.lapDNF);//Choix du tour pour aller dans les stands
+        printf("Nombre de tours prévus - %s : %d \n",nom_etape,ptPilote->GPrix.nbTrsEssais[etape]);
+        printf("DNF lap: %d \n",ptPilote->GPrix.lapDNF);
+        printf("Pit Stop: lap %d \n",ptPilote->GPrix.lapPit);
+        for(i=0;i <= ptPilote->GPrix.lapDNF;i++){
             printf("|--------------|\n");
             printf("|*** Tour %d ***|\n",i);
             printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
+            if(i == ptPilote->GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
+                ptPilote->GPrix.isStand= TRUE;
                 for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P1[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P1[i].tbTempsSect[j]);
+                    switch(etape){
+                        case ESSAI_P1:
+                            ptPilote->GPrix.P1[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P2:
+                            ptPilote->GPrix.P2[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P3:
+                            ptPilote->GPrix.P3[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                    }
+                    sharedMem(SHM_WRITE,ptPilote,1);
                 }
-                sharedMem(SHM_WRITE,ptPilote,1);
-            }else if(i == pilote.GPrix.lapDNF){
-                pilote.GPrix.isOut= TRUE;
+            }else if(i == ptPilote->GPrix.lapDNF){
+                ptPilote->GPrix.isOut= TRUE;
                 for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P1[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (DNF) \n",pilote.GPrix.P1[i].tbTempsSect[j]);
+                    switch(etape){
+                        case ESSAI_P1:
+                            ptPilote->GPrix.P1[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P2:
+                            ptPilote->GPrix.P2[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P3:
+                            ptPilote->GPrix.P3[i].tbTempsSect[j]= 0.0;
+                            //sleep(ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f (DNF) \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                    }
+                    sharedMem(SHM_WRITE,ptPilote,1);
                 }
-                sharedMem(SHM_WRITE,ptPilote,1);
             }else{
                 for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P1[i].tbTempsSect[j]);
+                    printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                    switch(etape){
+                        case ESSAI_P1:
+                            ptPilote->GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
+                            //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P2:
+                            ptPilote->GPrix.P2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
+                            //sleep(ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P3:
+                            ptPilote->GPrix.P3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
+                            //sleep(ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                    }
+                    sharedMem(SHM_WRITE,ptPilote,1);
                 }
-                sharedMem(SHM_WRITE,ptPilote,1);
             }
         }
     }else{
-        printf("Pit Stop: lap %d \n",pilote.GPrix.lapPit);
-        printf("Nb tours essais vendredi matin: %d \n",pilote.GPrix.nbTrsEssais[etape_essais]);
-        for(i=0;i<pilote.GPrix.nbTrsEssais[etape_essais];i++){
+        printf("Nombre de tours prévus - %s : %d \n",nom_etape,ptPilote->GPrix.nbTrsEssais[etape]);
+        printf("Pit Stop: lap %d \n",ptPilote->GPrix.lapPit);
+        for(i=0;i<ptPilote->GPrix.nbTrsEssais[etape];i++){
             printf("|--------------|\n");
             printf("|*** Tour %d ***|\n",i);
             printf("|--------------|\n");
-            if(i == pilote.GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
-                pilote.GPrix.isStand= TRUE;
+            if(i == ptPilote->GPrix.lapPit){//Si le tour n'est pas le tour pour aller aux stands
+                ptPilote->GPrix.isStand= TRUE;
                 for(j=0;j<NBSECTORS;j++){
-                    pilote.GPrix.P1[i].tbTempsSect[j]= 0.0;
-                    printf("Temps Secteur: %2.3f (P) \n",pilote.GPrix.P1[i].tbTempsSect[j]);
+                    switch(etape){
+                        case ESSAI_P1:
+                            ptPilote->GPrix.P1[i].tbTempsSect[j]= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P2:
+                            ptPilote->GPrix.P2[i].tbTempsSect[j]= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P3:
+                            ptPilote->GPrix.P3[i].tbTempsSect[j]= 0.0;
+                            printf("Temps Secteur: %2.3f (PIT) \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                    }
+                    sharedMem(SHM_WRITE,ptPilote,1);
                 }
             }else{
                 for(j=0;j<NBSECTORS;j++){//Début boucle secteurs
-                    pilote.GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
-                    //sleep(pilote.GPrix.P1[i].tbTempsSect[j]);
-                    printf("Temps Secteur: %2.3f \n",pilote.GPrix.P1[i].tbTempsSect[j]);
+                    switch(etape){
+                        case ESSAI_P1:
+                            ptPilote->GPrix.P1[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
+                            //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P2:
+                            ptPilote->GPrix.P2[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
+                            //sleep(ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P2[i].tbTempsSect[j]);
+                            break;
+                        case ESSAI_P3:
+                            ptPilote->GPrix.P3[i].tbTempsSect[j]= getRandomFloat(SEC_MIN,SEC_MAX);//Génération temps secteur entre 30.0 et 40.0
+                            //sleep(ptPilote->GPrix.P1[i].tbTempsSect[j]);
+                            printf("Temps Secteur: %2.3f \n",ptPilote->GPrix.P3[i].tbTempsSect[j]);
+                            break;
+                    }
+                    sharedMem(SHM_WRITE,ptPilote,1);
                 }
             }
         }
     }
 }
-*/
  /*
  mode: mode d'accès du segment mémoire (SHM_READ pour lecture ou SHM_WRITE pour écriture)
  *ptPilote: pointeur vers un type abstrait TPilote(voir pilote.h)

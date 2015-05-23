@@ -66,7 +66,7 @@ typedef struct{
 /* -- PROTOTYPES -- */
 int getRandomInt(int,int);
 double getRandomFloat(double,double);
-void getSectorEssais(TPilote*,int,int);
+void getEssais(TPilote*,int,char*);
 void sharedMem(int,TPilote*,int);
 
 
