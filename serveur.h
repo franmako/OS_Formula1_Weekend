@@ -7,3 +7,4 @@
 
 /* PROTOTYPES */
 void sharedMem(int,TPilote*,int);
+void afficheur(TPilote,int,char*);

@@ -38,17 +38,15 @@ typedef struct{
 }FTime;
 
 typedef struct{
+    int isOut;//DNF
+    int isStand;//PIT
     double tempsTour;
     double tbTempsSect[NBSECTORS];
 }TTour;
 
 typedef struct{
-    int nbTrsEssais[3];
-    int nbTrsQualif;
-    int nbTrsCourse;
+    int nbTrs[6]; //Nb tours essais + qualifs
     //Essais
-    int isOut;
-    int isStand;
     int lapPit;
     int DNF;
     int lapDNF;
@@ -74,7 +72,7 @@ typedef struct{
 /* -- PROTOTYPES -- */
 int getRandomInt(int,int);
 double getRandomFloat(double,double);
-void getLapTime(TPilote*,int,char*);
+void getStageTime(TPilote*,int,char*);
 void sharedMem(int,TPilote*,int);
 
 
