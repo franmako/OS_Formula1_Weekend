@@ -2,13 +2,16 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
-#include <math.h> //Pour l'utilisation de fmod pour le calcul des modulo pour float
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <errno.h>
+#include <sys/wait.h>
+#include <sys/wait.h>
 
 #define ERROR -1
 #define NBTRSCOURSE 5
@@ -29,9 +32,14 @@
 #define MIN_DNF 0
 #define MAX_DNF 100
 #define DNFPROB 80
+#define NBPILOTES 16
 
 
 /* -- STRUCTURES -- */
+typedef struct{
+    int nbPilote;
+    char *nomPilote;
+}TPiloteID;
 typedef struct{
     int minutes;
     double secondes;
@@ -55,6 +63,7 @@ typedef struct{
     TTour P3[NBTRSMAXESSAIS];
     //Qualifs
     TTour Q1[NBTRSMAXQUALIF];
+    double bestLap_Q1;
     int isQualifQ2;
     TTour Q2[NBTRSMAXQUALIF];
     int isQualifQ3;
@@ -65,13 +74,14 @@ typedef struct{
 
 typedef struct{
     int pid;
-    int nbPilote;
+    TPiloteID piloteID;
     TWECourse GPrix;
 }TPilote;
 
 /* -- PROTOTYPES -- */
 int getRandomInt(int,int);
 double getRandomFloat(double,double);
+int floatComp(const void*, const void*);
 void getStageTime(TPilote*,int,char*);
 void sharedMem(int,TPilote*,int);
 

@@ -5,12 +5,12 @@ int main(){
     int nbTours= NBTRSCOURSE;
     TPilote pilote_serv;
     TPilote *ptPilote= &pilote_serv;
-    sharedMem(SHM_READ,ptPilote,1);
 
+    sharedMem(SHM_READ,ptPilote,1);
     //Affichage Essais
-    afficheur(pilote_serv,ESSAI_P1,"Vendredi Matin");
-    afficheur(pilote_serv,ESSAI_P2,"Vendredi Après-Midi");
-    afficheur(pilote_serv,ESSAI_P3,"Samedi Matin");
+    //afficheur(pilote_serv,ESSAI_P1,"Vendredi Matin");
+    //afficheur(pilote_serv,ESSAI_P2,"Vendredi Après-Midi");
+    //afficheur(pilote_serv,ESSAI_P3,"Samedi Matin");
     //Affichage Qualifs
     afficheur(pilote_serv,QUALIF_Q1,"Qualification - Q1");
 
@@ -19,6 +19,7 @@ int main(){
 void afficheur(TPilote pilote, int etape, char* nom_etape){
     int i,j;
     int nbTrs= pilote.GPrix.nbTrs[etape];
+    printf("Meilleur temps tour: %f",pilote.GPrix.bestLap_Q1);
     printf("N° Pilote: %d \n",pilote.nbPilote);
     printf("Nombre de tours prévus - %s : %d \n",nom_etape,nbTrs);
     for(i=0;i<nbTrs;i++){
@@ -109,9 +110,8 @@ void sharedMem(int mode,TPilote *ptPilote,int nbPilotes){
     if ((shmid = shmget(key, shmSize, 0644 | IPC_CREAT)) == ERROR) {
         perror("shmget");
         exit(1);
-    }else{
-        printf("%d",shmid);
-    }
+    }else
+
     //Attachement au segment pour recevoir un pointeur vers ce dernier
     data = shmat(shmid, (void*)0, 0);
     if (data == (void*)(ERROR)) {

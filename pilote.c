@@ -1,18 +1,40 @@
 #include "pilote.h"
 
 int main(){
-    srand(time(NULL));//Init random
-    TPilote pilote;
-    TPilote *ptPilote= &pilote;
-    pilote.nbPilote = 44;
+    TPiloteID tbPIloteID[NBPILOTES]= {{44,"HAMILTON"},{6,"ROSBERG"},{3,"RICCIARDO"},{26,"KVYAT"},{19,"MASSA"},
+    {77,"BOTTAS"},{5,"VETTEL"},{7,"RAIKKONEN"},{14,"ALONSO"},{22,"BUTTON"},{11,"PEREZ"},{27,"HULKENBERG"},
+    {33,"VERSTAPPEN"},{55,"SAINZ Jr."},{8,"GROSJEAN"},{13,"MALDONADO"}}; //DB noms et nb pilotes
 
-    //Essais
-    getStageTime(ptPilote,ESSAI_P1,"Essais Vendredi Matin");
-    getStageTime(ptPilote,ESSAI_P2,"Essais Vendredi Après-Midi");
-    getStageTime(ptPilote,ESSAI_P3,"Essais Samedi Matin");
+    int i;
+    pid_t *tbPid_children = NULL; //Tb pour les pid des pilotes enfants
+    pid_t pid;//pid pour le pilote parent
+    tbPid_children= malloc(NBPILOTES * sizeof(pid_t));
 
-    //Qualifs
-    getStageTime(ptPilote,QUALIF_Q1,"Qualifs Q1");
+
+    /* Démarrage des pilotes*/
+    for (i=0;i < NBPILOTES;++i) {
+        if ((pid = fork()) == 0) {
+            srand(time(NULL));//Init random
+            TPilote pilote;
+            TPilote *ptPilote= &pilote;
+
+            //Init pilote
+            pilote.piloteID.nbPilote= tbPIloteID[i].nbPilote;
+            pilote.piloteID.nomPilote= tbPIloteID[i].nomPilote;
+            printf("Pilote: %s - Num: %d",pilote.piloteID.nomPilote,pilote.piloteID.nbPilote);
+            //Essais
+            getStageTime(ptPilote,ESSAI_P1,"Essais Vendredi Matin");
+            getStageTime(ptPilote,ESSAI_P2,"Essais Vendredi Après-Midi");
+            getStageTime(ptPilote,ESSAI_P3,"Essais Samedi Matin");
+            //Qualifs
+            getStageTime(ptPilote,QUALIF_Q1,"Qualifs Q1");
+
+            exit(0);
+        }else {
+            tbPid_children[i] = pid;
+        }
+    }
+
     /*if(pilote.GPrix.isQualifQ2 == TRUE){
         getStageTime(ptPilote,QUALIF_Q2,"Qualifs Q2");
         if(pilote.GPrix.isQualifQ3 == TRUE){
@@ -50,6 +72,13 @@ double getRandomFloat(double a, double b) {
 
     return (sectorTime);
 }
+/*
+
+int floatComp(const (void*)TTour tour1,const (void*)TTour tour2){
+    if(tour1->tempsTour < tour2->tempsTour)
+        return (-1);
+    return (tour1->tempsTour > tour2->tempsTour);
+}*/
 /*
 
 */
@@ -185,7 +214,7 @@ void getStageTime(TPilote *ptPilote,int etape,char* nom_etape){
             }
         }
     }else{
-        printf("Nombre de tours prévus - %s : %d \n",nom_etape,ptPilote->GPrix.nbTrs[etape]);
+        printf("| -- Nombre de tours prévus - %s : %d --| \n",nom_etape,ptPilote->GPrix.nbTrs[etape]);
         for(i=0;i<ptPilote->GPrix.nbTrs[etape];i++){
             printf("|--------------|\n");
             printf("|*** Tour %d ***|\n",i);
@@ -268,6 +297,7 @@ void getStageTime(TPilote *ptPilote,int etape,char* nom_etape){
             }
         }
     }
+    //qsort((void*)ptPilote,NBTRSMAXQUALIF,sizeof(TPilote),floatComp());
 }
  /*
  mode: mode d'accès du segment mémoire (SHM_READ pour lecture ou SHM_WRITE pour écriture)
@@ -303,7 +333,7 @@ void sharedMem(int mode,TPilote *ptPilote,int nbPilotes){
     //Lecture ou écriture dans le segment mémoire en fonction du mode
     if (mode == SHM_WRITE) {
         memcpy(data,ptPilote, sizeof(TPilote));
-        printf("Ecriture dans la mémoire partagée: N° Pilote: %d \n",ptPilote->nbPilote);
+        printf("Ecriture dans la mémoire partagée par %s \n",ptPilote->piloteID.nomPilote);
     }else{
         memcpy(ptPilote,data, sizeof(TPilote));
     }
