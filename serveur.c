@@ -110,8 +110,7 @@ void sharedMem(int mode,TPilote *ptPilote,int nbPilotes){
     if ((shmid = shmget(key, shmSize, 0644 | IPC_CREAT)) == ERROR) {
         perror("shmget");
         exit(1);
-    }else
-
+    }
     //Attachement au segment pour recevoir un pointeur vers ce dernier
     data = shmat(shmid, (void*)0, 0);
     if (data == (void*)(ERROR)) {
@@ -121,7 +120,7 @@ void sharedMem(int mode,TPilote *ptPilote,int nbPilotes){
     //Lecture ou écriture dans le segment mémoire en fonction du mode
     if (mode == SHM_WRITE) {
         memcpy(data,ptPilote, sizeof(TPilote));
-        printf("Ecriture dans la mémoire partagée: N° Pilote: %d \n",ptPilote->nbPilote);
+        printf("Ecriture dans la mémoire partagée par %s \n",ptPilote->piloteID.nomPilote);
     }else{
         memcpy(ptPilote,data, sizeof(TPilote));
     }
