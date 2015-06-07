@@ -20,7 +20,7 @@ void afficheur(TPilote pilote, int etape, char* nom_etape){
     int i,j;
     int nbTrs= pilote.GPrix.nbTrs[etape];
     printf("Meilleur temps tour: %f",pilote.GPrix.bestLap_Q1);
-    printf("N° Pilote: %d \n",pilote.nbPilote);
+    printf("Pilote: %s - N° %d \n",pilote.piloteID.nomPilote,pilote.piloteID.nbPilote);
     printf("Nombre de tours prévus - %s : %d \n",nom_etape,nbTrs);
     for(i=0;i<nbTrs;i++){
         printf("|--------------|\n");
